@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +13,8 @@ class TicketManagerTest {
 
     TicketRepository repo = new TicketRepository();
     TicketManager manager = new TicketManager(repo);
+    TicketByTimeAscComparator comparator = new TicketByTimeAscComparator();
+
 
     Ticket ticket1 = new Ticket(1, 2700, "MSK", "SPB", 360);
     Ticket ticket2 = new Ticket(2, 1200, "BLG", "UFA", 210);
@@ -43,8 +46,8 @@ class TicketManagerTest {
     @Test
     public void shouldFindAllCoincidences() {
 
-        Ticket[] expected = {ticket10, ticket1, ticket6, ticket3, ticket8};
-        Ticket[] actual = manager.findAll("MSK", "SPB");
+        Ticket[] expected = {ticket1, ticket6, ticket3, ticket10, ticket8};
+        Ticket[] actual = manager.findAll("MSK", "SPB", comparator);
 
         Assertions.assertArrayEquals(expected, actual);
     }
@@ -53,7 +56,7 @@ class TicketManagerTest {
     public void shouldFindOneCoincidence() {
 
         Ticket[] expected = {ticket2};
-        Ticket[] actual = manager.findAll("BLG", "UFA");
+        Ticket[] actual = manager.findAll("BLG", "UFA", comparator);
 
         Assertions.assertArrayEquals(expected, actual);
     }
@@ -62,7 +65,7 @@ class TicketManagerTest {
     public void shouldFindNotingCoincidence() {
 
         Ticket[] expected = {};
-        Ticket[] actual = manager.findAll("LON", "MBN");
+        Ticket[] actual = manager.findAll("LON", "MBN", comparator);
 
         Assertions.assertArrayEquals(expected, actual);
     }
