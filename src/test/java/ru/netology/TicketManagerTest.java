@@ -12,13 +12,17 @@ class TicketManagerTest {
 
     TicketRepository repo = new TicketRepository();
     TicketManager manager = new TicketManager(repo);
-    TicketPriceComparator priceComparator = new TicketPriceComparator();
 
-    Ticket ticket1 = new Ticket(45, 2700, "VKO", "SVO", 360);
-    Ticket ticket2 = new Ticket(6, 1200, "SVO", "DME", 210);
-    Ticket ticket3 = new Ticket(21, 4300, "DME", "VKO", 470);
-    Ticket ticket4 = new Ticket(16, 1600, "VKO", "VKO", 530);
-    Ticket ticket5 = new Ticket(7, 2450, "DME", "DME", 370);
+    Ticket ticket1 = new Ticket(1, 2700, "MSK", "SPB", 360);
+    Ticket ticket2 = new Ticket(2, 1200, "BLG", "UFA", 210);
+    Ticket ticket3 = new Ticket(3, 4300, "MSK", "SPB", 470);
+    Ticket ticket4 = new Ticket(4, 1600, "MSK", "UFA", 530);
+    Ticket ticket5 = new Ticket(5, 1250, "STV", "MNK", 370);
+    Ticket ticket6 = new Ticket(6, 2850, "MSK", "SPB", 380);
+    Ticket ticket7 = new Ticket(7, 3260, "MSK", "UFA", 470);
+    Ticket ticket8 = new Ticket(8, 4850, "MSK", "SPB", 580);
+    Ticket ticket9 = new Ticket(9, 1950, "BLG", "SPB", 510);
+    Ticket ticket10 = new Ticket(10, 2230, "MSK", "SPB", 530);
 
 
     @BeforeEach
@@ -28,21 +32,38 @@ class TicketManagerTest {
         repo.save(ticket3);
         repo.save(ticket4);
         repo.save(ticket5);
+        repo.save(ticket6);
+        repo.save(ticket7);
+        repo.save(ticket8);
+        repo.save(ticket9);
+        repo.save(ticket10);
+
     }
 
     @Test
     public void shouldFindAllCoincidences() {
 
-        Ticket[] expected = {ticket1, ticket2, ticket3, ticket4, ticket5};
-        Ticket[] actual = manager.findAll("VKO", "SVO");
+        Ticket[] expected = {ticket10, ticket1, ticket6, ticket3, ticket8};
+        Ticket[] actual = manager.findAll("MSK", "SPB");
 
         Assertions.assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void shouldSortByPrice() {
+    public void shouldFindOneCoincidence() {
 
-        Ticket[] tickets = {ticket1, ticket2, ticket3, ticket4, ticket5};
-        Arrays.sort(tickets, priceComparator);
+        Ticket[] expected = {ticket2};
+        Ticket[] actual = manager.findAll("BLG", "UFA");
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldFindNotingCoincidence() {
+
+        Ticket[] expected = {};
+        Ticket[] actual = manager.findAll("LON", "MBN");
+
+        Assertions.assertArrayEquals(expected, actual);
     }
 }

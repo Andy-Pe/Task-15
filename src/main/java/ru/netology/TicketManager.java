@@ -1,5 +1,7 @@
 package ru.netology;
 
+import java.util.Arrays;
+
 public class TicketManager {
     private TicketRepository repo;
 
@@ -20,33 +22,26 @@ public class TicketManager {
         return reversed;
     }
 
-
-//    public Ticket[] findAll(String from, String to) {
-//        Ticket[] airport = new Ticket[getTickets().length];
-//        for (int i = 0; i < getTickets().length; i++) {
-//            airport[i] = ;
-//        }
-//        return airport;
-//    }
-
-
-    public boolean matches(Ticket ticket, String departureAirport, String arrivalAirport) {
-        if (ticket.getDepartureAirport().contains(departureAirport)) {
-            return true;
-        } else if (ticket.getArrivalAirport().contains(arrivalAirport)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public Ticket[] findAll(String departureAirport, String arrivalAirport) {
+    public Ticket[] findAll(String from, String to) {
         Ticket[] result = new Ticket[0];
         for (Ticket ticket : repo.getTickets()) {
-            if (matches(ticket, departureAirport, arrivalAirport)) {
-                result = repo.getTickets();
+            if (matches(ticket, from, to)) {
+               Ticket[] tmp = new Ticket[result.length + 1];
+                for (int i = 0; i < result.length; i++) {
+                    tmp[i] = result[i];
+                }
+                tmp[result.length] = ticket;
+                result = tmp;
             }
         }
+        Arrays.sort(result);
         return result;
+    }
+
+    public boolean matches(Ticket ticket, String from, String to) {
+        if (ticket.getFrom().equals(from) && ticket.getTo().equals(to)) {
+            return true;
+        }
+        return false;
     }
 }
